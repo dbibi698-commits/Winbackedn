@@ -27,7 +27,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-UPLOAD_DIR = Path("/app/uploads")
+UPLOAD_DIR = Path("/tmp/uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
 
 MAX_FILE_SIZE = 500 * 1024 * 1024
