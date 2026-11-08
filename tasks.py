@@ -28,10 +28,10 @@ celery_app.conf.update(
     task_acks_late=True
 )
 
-UPLOAD_DIR = Path("/app/uploads")
-OUTPUT_DIR = Path("/app/processed")
-SITES_DIR = Path("/app/sites")
-DEPLOY_DIR = Path("/app/deployed")
+UPLOAD_DIR = Path("/tmp/uploads")
+OUTPUT_DIR = Path("/tmp/processd")
+SITES_DIR = Path("/tmp/sites")
+DEPLOY_DIR = Path("/tmp/deployed")
 
 for folder in [UPLOAD_DIR, OUTPUT_DIR, DEPLOY_DIR]:
     folder.mkdir(parents=True, exist_ok=True)
