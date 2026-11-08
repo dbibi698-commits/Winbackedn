@@ -1,0 +1,50 @@
+services:
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+  api:
+    build: .
+    container_name: heavy_api
+    restart: unless-stopped
+
+    ports:
+      - "8000:8000"
+
+    environment:
+      REDIS_URL: redis://redis:6379/0
+
+    depends_on:
+      - redis
+
+    volumes:
+      - ./uploads:/app/uploads
+      - ./processed:/app/processed
+      - ./sites:/app/sites:ro
+      - ./deployed:/app/deployed
+
+  worker:
+    build: .
+    container_name: heavy_worker
+    restart: unless-stopped
+
+    command: celery -A tasks.celery_app worker --loglevel=info --concurrency=2
+
+    environment:
+      REDIS_URL: redis://redis:6379/0
+
+    depends_on:
+      - redis
+
+    volumes:
+      - ./uploads:/app/uploads
+      - ./processed:/app/processed
+      - ./sites:/app/sites:ro
+      - ./deployed:/app/deployed
+
+volumes:
+  redis_data:
